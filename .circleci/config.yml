@@ -29,6 +29,24 @@ jobs:
           command: |
             echo $MY_NAME
 
+  save_output_file:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - run: echo "testing sharing files between jobs" > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt
+
+  print_output_file:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: cat ~/output.txt
+
 workflows:
   # Name the workflow "welcome"
   welcome:
@@ -40,3 +58,7 @@ workflows:
           requires:
             - print_hello
       - say_my_name
+      - save_output_file
+      - print_output_file:
+          requires:
+            - save_output_file
