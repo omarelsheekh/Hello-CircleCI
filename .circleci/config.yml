@@ -6,32 +6,44 @@ orbs:
   welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
 
+default_docker: &default_docker
+  docker:
+      - image: cimg/base:2020.01
+
+commands:
+  echo_text:
+    description: echo some text
+    parameters:
+      text:
+        type: string
+        default: some text
+    steps:
+      - run: echo << parameters.text >>
+
 jobs:
   print_hello:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run: echo hello
+      - echo_text:
+        text: hello 
 
   print_world:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run: echo world
+      - echo_text:
+        text: world
 
   say_my_name:
-    docker:
-      - image: cimg/base:2020.01
+    <<: *default_docker
     steps:
       - checkout
-      - run:
-          name: "echo an env var that is part of our project"
-          command: |
-            echo $MY_NAME
+      - echo_text:
+        text: $MY_NAME
 
   save_output_file:
-    docker:
-      - image: cimg/base:2020.01
+    <<: *default_docker
     steps:
       - run: echo "testing sharing files between jobs" > ~/output.txt
       - persist_to_workspace:
@@ -40,8 +52,7 @@ jobs:
             - output.txt
 
   print_output_file:
-    docker:
-      - image: cimg/base:2020.01
+    <<: *default_docker
     steps:
       - attach_workspace:
           at: ~/
