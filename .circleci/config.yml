@@ -19,6 +19,16 @@ jobs:
     steps:
       - run: echo world
 
+  say_my_name:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout
+      - run:
+          name: "echo an env var that is part of our project"
+          command: |
+            echo $MY_NAME
+
 workflows:
   # Name the workflow "welcome"
   welcome:
