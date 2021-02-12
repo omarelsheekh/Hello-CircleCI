@@ -26,21 +26,21 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - echo_text:
-        text: "hello" 
+          text: hello
 
   print_world:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - echo_text:
-        text: "world"
+          text: world
 
   say_my_name:
     <<: *default_docker
     steps:
       - checkout
       - echo_text:
-        text: "$MY_NAME"
+          text: $MY_NAME
 
   save_output_file:
     <<: *default_docker
