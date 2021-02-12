@@ -39,3 +39,4 @@ workflows:
       - print_world:
           requires:
             - print_hello
+      - say_my_name
