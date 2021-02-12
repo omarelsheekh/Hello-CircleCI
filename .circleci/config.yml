@@ -19,6 +19,10 @@ commands:
         default: some text
     steps:
       - run: echo << parameters.text >>
+      - run:
+          name: notify job failur
+          command: curl --data "{"error":"echo job failed"}" http://example.com/error_logs
+          when: on_fail
 
 jobs:
   print_hello:
